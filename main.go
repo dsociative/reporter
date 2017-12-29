@@ -54,11 +54,12 @@ func readInConfig() error {
 
 func main() {
 	startMetric.WithLabelValues("reporter", version).SetToCurrentTime()
-	go http.ListenAndServe(viper.GetString("prometheus"), promhttp.Handler())
 
 	if err := readInConfig(); err != nil {
 		log.Fatal("config read: ", err)
 	}
+
+	go http.ListenAndServe(viper.GetString("prometheus"), promhttp.Handler())
 
 	access := map[string][]string{}
 	rawAccess, err := ioutil.ReadFile(viper.GetString("access"))
